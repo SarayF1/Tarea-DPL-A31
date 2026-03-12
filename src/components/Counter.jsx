@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./Contador.css";
 
 function Contador() {
     const [contador, setContador] = useState(0);
@@ -16,12 +17,17 @@ function Contador() {
     };
 
     return (
-        <div>
-            <h2>Contador: {contador}</h2>
+        <div className="contenedor">
+            <div className="contador-box">
+                <h2>Contador</h2>
+                <p className="numero">{contador}</p>
 
-            <button onClick={incrementar}>+</button>
-            <button onClick={decrementar}>-</button>
-            <button onClick={reiniciar}>Reset</button>
+                <div className="botones">
+                    <button className="btn sumar" onClick={incrementar}>+</button>
+                    <button className="btn restar" onClick={decrementar}>-</button>
+                    <button className="btn reset" onClick={reiniciar}>Reset</button>
+                </div>
+            </div>
         </div>
     );
 }
