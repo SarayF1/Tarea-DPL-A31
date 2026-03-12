@@ -1,0 +1,91 @@
+---
+const APIurl = "https://pokeapi.co/api/v2/pokemon?limit=12";
+
+const response = await fetch(APIurl);
+const data = await response.json();
+
+// Obtener detalles de cada pokemon para imagen
+const pokemons = await Promise.all(
+    data.results.map(async (pokemon: any) => {
+        const res = await fetch(pokemon.url);
+        const details = await res.json();
+
+        return {
+            name: details.name,
+            image: details.sprites.front_default,
+            id: details.id,
+        };
+    }),
+);
+---
+
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>PokeAPI Cards</title>
+
+        <style>
+            body {
+                font-family: Arial;
+                background: #f5f5f5;
+                padding: 40px;
+            }
+
+            h1 {
+                text-align: center;
+            }
+
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-top: 30px;
+            }
+
+            .card {
+                background: white;
+                border-radius: 12px;
+                padding: 20px;
+                text-align: center;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                transition: transform 0.2s;
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+            img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .id {
+                color: #777;
+                font-size: 14px;
+            }
+
+            .name {
+                text-transform: capitalize;
+                font-weight: bold;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Pokémon Cards</h1>
+
+        <div class="grid">
+            {
+                pokemons.map((pokemon) => (
+                    <div class="card">
+                        <img src={pokemon.image} alt={pokemon.name} />
+                        <p class="id">#{pokemon.id}</p>
+                        <p class="name">{pokemon.name}</p>
+                    </div>
+                ))
+            }
+        </div>
+    </body>
+</html>
